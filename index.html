@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>PADEL DISTRICT — Бронирование кортов</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#070C15;--bg2:#0D1525;--bg3:#111827;
+  --surf:#141E2E;--surf2:#1A2540;
+  --brd:#1E2D42;--brd2:#253347;
+  --acc:#00E5A0;--acc-lo:rgba(0,229,160,.08);--acc-glow:rgba(0,229,160,.18);
+  --vio:#7B5CFF;--vio-lo:rgba(123,92,255,.08);
+  --txt:#E8F0F8;--txt2:#8A9BB5;--txt3:#4E6080;
+  --r:14px;--rsm:8px;--rlg:20px;
+  --tr:.22s cubic-bezier(.4,0,.2,1);
+  --font:'Segoe UI',system-ui,-apple-system,sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--txt);font-family:var(--font);font-size:15px;line-height:1.6;overflow-x:hidden}
+::selection{background:var(--acc);color:#000}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--brd2);border-radius:3px}
+h1,h2,h3,h4{line-height:1.2;font-weight:700;letter-spacing:-.02em}
+em{font-style:normal;color:var(--acc)}
+.container{max-width:1120px;margin:0 auto;padding:0 24px}
+
+/* –– BUTTONS –– */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;border:none;border-radius:var(–rsm);cursor:pointer;font-weight:700;font-size:14px;letter-spacing:.02em;text-transform:uppercase;font-family:var(–font);transition:var(–tr)}
+.btn svg{width:16px;height:16px;flex-shrink:0}
+.btn-g{background:var(–acc);color:#000}
+.btn-g:hover{background:#fff;transform:translateY(-2px);box-shadow:0 8px 30px var(–acc-glow)}
+.btn-g:active{transform:translateY(0)}
+.btn-v{background:var(–vio);color:#fff}
+.btn-v:hover{background:#9b7fff;transform:translateY(-2px);box-shadow:0 8px 30px rgba(123,92,255,.3)}
+.btn-ghost{background:transparent;color:var(–txt);border:1.5px solid var(–brd2)}
+.btn-ghost:hover{border-color:var(–acc);color:var(–acc);transform:translateY(-2px)}
+.btn-sm{padding:9px 18px;font-size:13px}
+.btn-full{width:100%;justify-content:center;font-size:15px;padding:16px}
+.btn-danger{background:rgba(255,80,80,.1);color:#ff6060;border:1.5px solid rgba(255,80,80,.2);padding:7px 13px;border-radius:var(–rsm);cursor:pointer;font-size:12px;font-weight:700;font-family:var(–font);transition:var(–tr)}
+.btn-danger:hover{background:rgba(255,80,80,.2)}
+
+/* –– NAV –– */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(7,12,21,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(–brd);transition:var(–tr)}
+.nav.sc{background:rgba(7,12,21,.97)}
+.nav-inner{max-width:1120px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:24px}
+.logo{display:flex;align-items:center;gap:10px;cursor:pointer;flex-shrink:0}
+.logo-icon{width:34px;height:34px}
+.logo-text{font-size:15px;font-weight:400;letter-spacing:.12em;color:var(–txt);text-transform:uppercase}
+.logo-text strong{color:var(–acc);font-weight:800}
+.nav-links{display:flex;gap:4px;list-style:none;margin-left:auto}
+.nav-link{display:block;padding:8px 14px;color:var(–txt2);font-size:14px;border-radius:6px;transition:var(–tr);cursor:pointer;user-select:none}
+.nav-link:hover{color:var(–txt);background:var(–surf)}
+.btn-nav{padding:9px 20px;background:var(–acc);color:#000;font-weight:700;font-size:13px;border:none;border-radius:7px;cursor:pointer;flex-shrink:0;letter-spacing:.04em;text-transform:uppercase;font-family:var(–font);transition:var(–tr)}
+.btn-nav:hover{background:#fff;box-shadow:0 4px 20px var(–acc-glow)}
+.burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px;margin-left:auto}
+.burger span{display:block;width:22px;height:2px;background:var(–txt);border-radius:2px;transition:var(–tr)}
+.mmenu{display:none;flex-direction:column;gap:4px;padding:12px 24px 20px;border-top:1px solid var(–brd);background:rgba(7,12,21,.97)}
+.mmenu.open{display:flex}
+.mmenu .mlink{color:var(–txt2);padding:10px 0;font-size:15px;border-bottom:1px solid var(–brd);transition:color var(–tr);cursor:pointer;user-select:none}
+.mmenu .mlink:hover{color:var(–acc)}
+.mmenu .btn{margin-top:8px;justify-content:center;width:100%}
+
+/* –– HERO –– */
+.hero{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden;padding-top:64px}
+.hero-bg{position:absolute;inset:0}
+.hero-svg{width:100%;height:100%;object-fit:cover}
+.hero-ov{position:absolute;inset:0;background:linear-gradient(135deg,rgba(7,12,21,.93) 0%,rgba(7,12,21,.76) 50%,rgba(7,12,21,.6) 100%)}
+.hero-cnt{position:relative;z-index:2;max-width:620px;padding:60px 24px 100px;margin-left:max(24px,calc((100vw - 1120px)/2));animation:fu .8s ease both}
+@keyframes fu{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.hero-tag{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(–acc);padding:6px 14px;border:1px solid rgba(0,229,160,.25);border-radius:100px;margin-bottom:24px;animation:fu .8s .1s ease both}
+.hero-h1{font-size:clamp(40px,6vw,72px);font-weight:800;color:var(–txt);margin-bottom:20px;animation:fu .8s .2s ease both}
+.hero-p{font-size:16px;color:var(–txt2);line-height:1.7;margin-bottom:36px;animation:fu .8s .3s ease both}
+.hero-acts{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:48px;animation:fu .8s .4s ease both}
+.hero-stats{display:flex;align-items:center;gap:24px;animation:fu .8s .5s ease both}
+.stat{display:flex;flex-direction:column}
+.sn{font-size:28px;font-weight:800;color:var(–acc);line-height:1}
+.sl{font-size:12px;color:var(–txt3);letter-spacing:.06em;margin-top:2px}
+.sdiv{width:1px;height:36px;background:var(–brd2)}
+.scroll-arr{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);z-index:2;cursor:pointer;animation:bo 2s infinite}
+.scroll-arr svg{width:28px;height:28px}
+@keyframes bo{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}
+
+/* –– SECTIONS –– */
+.sec{padding:90px 0}
+.sec-dark{background:var(–bg2)}
+.sec-hd{text-align:center;margin-bottom:56px}
+.sec-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(–acc);margin-bottom:12px}
+.sec-title{font-size:clamp(28px,4vw,44px);color:var(–txt);margin-bottom:12px}
+.sec-desc{font-size:15px;color:var(–txt2);max-width:480px;margin:0 auto}
+
+/* –– COURTS –– */
+.courts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px}
+.cc{background:var(–surf);border:1.5px solid var(–brd);border-radius:var(–rlg);overflow:hidden;cursor:pointer;transition:var(–tr)}
+.cc:hover{border-color:var(–acc);transform:translateY(-4px);box-shadow:0 12px 48px rgba(0,229,160,.12)}
+.cc.sel{border-color:var(–acc);box-shadow:0 0 0 2px var(–acc)}
+.cc2:hover{border-color:var(–vio);box-shadow:0 12px 48px rgba(123,92,255,.12)}
+.cc2.sel{border-color:var(–vio);box-shadow:0 0 0 2px var(–vio)}
+.cc-img{position:relative}
+.cc-svg{width:100%;height:auto;display:block}
+.cbadge{position:absolute;top:12px;right:12px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;background:rgba(0,229,160,.15);color:var(–acc);border:1px solid rgba(0,229,160,.3);border-radius:100px;backdrop-filter:blur(8px)}
+.cbadge.busy{background:rgba(255,80,80,.1);color:#ff6060;border-color:rgba(255,80,80,.3)}
+.cbadge2{background:rgba(123,92,255,.15);color:var(–vio);border-color:rgba(123,92,255,.3)}
+.cc-body{padding:20px}
+.cc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.cc-name{font-size:20px;color:var(–txt)}
+.cc-status{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(–acc)}
+.cc-status.busy{color:#ff6060}
+.dot{width:7px;height:7px;border-radius:50%;background:currentColor;animation:dp 2s infinite}
+@keyframes dp{0%,100%{opacity:1}50%{opacity:.4}}
+.cc-txt{font-size:13px;color:var(–txt2);margin-bottom:14px;line-height:1.5}
+.cc-feats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.feat{display:flex;align-items:center;gap:5px;font-size:12px;color:var(–txt2);background:var(–surf2);padding:5px 10px;border-radius:100px;border:1px solid var(–brd2)}
+.feat svg{width:13px;height:13px;flex-shrink:0}
+.cc-ft{display:flex;align-items:center;justify-content:space-between}
+.cc-price{display:flex;align-items:baseline;gap:4px}
+.pamt{font-size:22px;font-weight:800;color:var(–txt)}
+.pper{font-size:13px;color:var(–txt3)}
+
+/* –– BOOKING –– */
+.bk-layout{display:grid;grid-template-columns:1fr 360px;gap:28px;align-items:start}
+.fc,.sc,.mbc{background:var(–surf);border:1.5px solid var(–brd);border-radius:var(–rlg);padding:28px}
+.sc{margin-bottom:20px}
+.fg{margin-bottom:22px}
+.flabel{display:block;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(–txt2);margin-bottom:10px}
+.iw{position:relative}
+.iico{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:17px;height:17px;color:var(–txt3);pointer-events:none}
+.finp{width:100%;background:var(–bg3);border:1.5px solid var(–brd2);border-radius:var(–rsm);padding:12px 14px 12px 42px;color:var(–txt);font-size:14px;font-family:var(–font);transition:var(–tr);outline:none;-webkit-appearance:none;color-scheme:dark}
+.finp:focus{border-color:var(–acc);box-shadow:0 0 0 3px var(–acc-lo)}
+.finp::placeholder{color:var(–txt3)}
+.finp::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.4);cursor:pointer}
+.ferr{display:block;font-size:12px;color:#ff6060;margin-top:5px;min-height:16px}
+.ferr:empty{display:none}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+.court-sel{display:flex;gap:10px}
+.csbtn{flex:1;display:flex;align-items:center;gap:12px;background:var(–bg3);border:1.5px solid var(–brd2);border-radius:var(–rsm);padding:12px 14px;cursor:pointer;font-family:var(–font);transition:var(–tr)}
+.csbtn:hover{border-color:var(–acc)}
+.csbtn.on1{border-color:var(–acc);background:var(–acc-lo)}
+.csbtn.on2{border-color:var(–vio);background:var(–vio-lo)}
+.csnum{width:32px;height:32px;border-radius:8px;background:var(–surf2);color:var(–txt2);font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:var(–tr)}
+.csnum.a1{background:var(–acc);color:#000}
+.csnum.a2{background:var(–vio);color:#fff}
+.csi{display:flex;flex-direction:column;gap:2px}
+.csn{font-size:13px;font-weight:700;color:var(–txt)}
+.csp{font-size:12px;color:var(–txt3)}
+
+.pl-sel,.dur-sel{display:flex;gap:8px}
+.pbtn,.dbtn{flex:1;padding:11px;background:var(–bg3);border:1.5px solid var(–brd2);border-radius:var(–rsm);color:var(–txt2);font-size:14px;font-weight:700;cursor:pointer;font-family:var(–font);transition:var(–tr)}
+.dbtn{font-size:13px;padding:10px}
+.pbtn:hover,.dbtn:hover{border-color:var(–acc);color:var(–acc)}
+.pbtn.on,.dbtn.on{background:var(–acc-lo);border-color:var(–acc);color:var(–acc)}
+
+.slots-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:8px;min-height:60px}
+.slots-ph{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;gap:10px;padding:20px;color:var(–txt3);font-size:13px;text-align:center}
+.slots-ph svg{width:28px;height:28px}
+.slot{padding:10px 6px;background:var(–bg3);border:1.5px solid var(–brd2);border-radius:var(–rsm);text-align:center;font-size:13px;font-weight:600;color:var(–txt2);cursor:pointer;transition:var(–tr);user-select:none}
+.slot:hover:not(.occ){border-color:var(–acc);color:var(–acc)}
+.slot.on{background:var(–acc-lo);border-color:var(–acc);color:var(–acc)}
+.slot.occ{background:rgba(255,80,80,.05);border-color:rgba(255,80,80,.2);color:var(–txt3);cursor:not-allowed;text-decoration:line-through;opacity:.6}
+
+.stitle{font-size:16px;color:var(–txt);margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(–brd)}
+.slines{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.sline,.stline{display:flex;justify-content:space-between;align-items:center}
+.sk{font-size:13px;color:var(–txt2)}
+.sv{font-size:13px;color:var(–txt);font-weight:600}
+.inv-box{background:var(–bg3);border:1px solid var(–brd);border-radius:var(–rsm);padding:14px;margin-bottom:16px}
+.inv-box-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.inv-box-t{font-size:12px;font-weight:700;color:var(–txt2);text-transform:uppercase;letter-spacing:.08em}
+.inv-goto{font-size:12px;color:var(–acc);background:none;border:none;cursor:pointer;font-weight:600;font-family:var(–font)}
+.inv-goto:hover{text-decoration:underline}
+.inv-rows{display:flex;flex-direction:column;gap:4px}
+.inv-empty{font-size:12px;color:var(–txt3)}
+.inv-row{display:flex;justify-content:space-between;font-size:12px;color:var(–txt2)}
+.inv-row span:last-child{color:var(–txt);font-weight:600}
+.sdiv2{height:1px;background:var(–brd);margin:14px 0}
+.stline{margin-bottom:8px}
+.stotal{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-top:1px solid var(–brd);margin:8px 0 20px;font-size:15px;font-weight:700;color:var(–txt)}
+.tamt{font-size:24px;font-weight:800;color:var(–acc)}
+.snote{font-size:11px;color:var(–txt3);text-align:center;margin-top:10px}
+
+.mbc-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.mbc-t{font-size:13px;font-weight:700;color:var(–txt2);text-transform:uppercase;letter-spacing:.08em}
+.mb-list{display:flex;flex-direction:column;gap:10px}
+.mb-empty{font-size:13px;color:var(–txt3)}
+.bi{background:var(–bg3);border:1px solid var(–brd);border-radius:var(–rsm);padding:12px;transition:var(–tr)}
+.bi-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.bi-nm{font-size:13px;font-weight:700;color:var(–txt)}
+.bi-rm{background:none;border:none;color:var(–txt3);cursor:pointer;font-size:18px;line-height:1;padding:0;transition:color var(–tr)}
+.bi-rm:hover{color:#ff6060}
+.bi-d{font-size:12px;color:var(–txt2);line-height:1.6}
+.bi-p{font-size:13px;font-weight:700;color:var(–acc);margin-top:4px}
+
+/* –– INVENTORY –– */
+.inv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px}
+.icard{background:var(–surf);border:1.5px solid var(–brd);border-radius:var(–rlg);padding:24px;display:flex;gap:18px;align-items:flex-start;transition:var(–tr)}
+.icard:hover{border-color:var(–acc);transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,229,160,.1)}
+.icard.active{border-color:var(–acc);background:var(–acc-lo)}
+.isvg{width:60px;height:60px;flex-shrink:0}
+.iinfo{flex:1}
+.inm{font-size:15px;font-weight:700;color:var(–txt);margin-bottom:4px}
+.idesc{font-size:12px;color:var(–txt3);margin-bottom:14px;line-height:1.4}
+.ift{display:flex;justify-content:space-between;align-items:center}
+.ipr{font-size:13px;font-weight:700;color:var(–acc)}
+.icnt{display:flex;align-items:center;gap:10px}
+.cbtn{width:28px;height:28px;border-radius:50%;background:var(–surf2);border:1.5px solid var(–brd2);color:var(–txt);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:var(–font);transition:var(–tr)}
+.cbtn:hover{border-color:var(–acc);color:var(–acc);background:var(–acc-lo)}
+.cval{font-size:16px;font-weight:700;color:var(–txt);min-width:20px;text-align:center}
+.itotal-bar{margin-top:32px;background:var(–surf);border:1.5px solid var(–acc);border-radius:var(–r);padding:18px 24px;display:flex;align-items:center;gap:16px;animation:fu .4s ease both}
+.itotal-bar.h{display:none}
+.itl{font-size:14px;color:var(–txt2);flex:1}
+.ita{font-size:20px;font-weight:800;color:var(–acc)}
+
+/* –– ADDR –– */
+.astrip{background:var(–surf);border-top:1px solid var(–brd);border-bottom:1px solid var(–brd);padding:24px 0}
+.acont{display:flex;flex-wrap:wrap;gap:32px;justify-content:center}
+.aitem{display:flex;align-items:center;gap:10px;font-size:14px;color:var(–txt2)}
+.aitem svg{width:18px;height:18px;flex-shrink:0}
+
+/* –– FOOTER –– */
+.footer{padding:32px 0;background:var(–bg)}
+.footer-in{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-txt{font-size:13px;color:var(–txt3)}
+
+/* –– MODAL –– */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);z-index:200;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s}
+.ov.open{opacity:1;visibility:visible}
+.modal{background:var(–surf);border:1.5px solid var(–brd2);border-radius:var(–rlg);padding:40px 32px;max-width:440px;width:100%;text-align:center;animation:si .3s ease both}
+@keyframes si{from{opacity:0;transform:scale(.9) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.m-ico{margin-bottom:20px}
+.m-ico svg{width:56px;height:56px}
+.m-title{font-size:22px;margin-bottom:10px;color:var(–txt)}
+.m-txt{font-size:14px;color:var(–txt2);margin-bottom:20px}
+.m-det{background:var(–bg3);border:1px solid var(–brd);border-radius:var(–rsm);padding:16px;margin-bottom:24px;text-align:left;font-size:13px;color:var(–txt2);line-height:1.8}
+.m-det:empty{display:none}
+
+/* –– TOAST –– */
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);background:var(–surf2);border:1px solid var(–brd2);color:var(–txt);font-size:14px;padding:12px 24px;border-radius:100px;z-index:300;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* –– RESPONSIVE –– */
+@media(max-width:900px){.bk-layout{grid-template-columns:1fr}}
+@media(max-width:768px){
+.nav-links,.btn-nav{display:none}
+.burger{display:flex}
+.hero-cnt{margin-left:0;padding:48px 24px 80px}
+.courts-grid{grid-template-columns:1fr}
+.frow{grid-template-columns:1fr}
+.inv-grid{grid-template-columns:1fr}
+.itotal-bar{flex-wrap:wrap}
+.acont{flex-direction:column;gap:16px}
+.footer-in{flex-direction:column;text-align:center}
+}
+@media(max-width:480px){
+.hero-stats{gap:16px}
+.sn{font-size:22px}
+.hero-acts{flex-direction:column}
+.hero-acts .btn{width:100%;justify-content:center}
+.court-sel{flex-direction:column}
+.dur-sel{flex-wrap:wrap}
+}
+</style>
+
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <div class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+      <svg class="logo-icon" viewBox="0 0 36 36" fill="none">
+        <rect x="2" y="2" width="32" height="32" rx="8" fill="#00E5A0" opacity="0.15"/>
+        <path d="M10 26L18 10L26 26" stroke="#00E5A0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="18" cy="20" r="3.5" fill="#00E5A0"/>
+      </svg>
+      <span class="logo-text">PADEL<strong>DISTRICT</strong></span>
+    </div>
+    <ul class="nav-links">
+      <li><span class="nav-link" onclick="goTo('hero')">Главная</span></li>
+      <li><span class="nav-link" onclick="goTo('courts')">Корты</span></li>
+      <li><span class="nav-link" onclick="goTo('booking')">Бронирование</span></li>
+      <li><span class="nav-link" onclick="goTo('inventory')">Инвентарь</span></li>
+    </ul>
+    <button class="btn-nav" onclick="goTo('booking')">Забронировать</button>
+    <button class="burger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+  </div>
+  <div class="mmenu" id="mmenu">
+    <span class="mlink" onclick="goTo('hero');closeMobile()">Главная</span>
+    <span class="mlink" onclick="goTo('courts');closeMobile()">Корты</span>
+    <span class="mlink" onclick="goTo('booking');closeMobile()">Бронирование</span>
+    <span class="mlink" onclick="goTo('inventory');closeMobile()">Инвентарь</span>
+    <button class="btn btn-g" onclick="goTo('booking');closeMobile()">Забронировать</button>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <svg class="hero-svg" viewBox="0 0 900 500" preserveAspectRatio="xMidYMid slice">
+      <rect width="900" height="500" fill="#0A0F1A"/>
+      <rect x="80" y="60" width="740" height="400" rx="8" fill="#0D1E35" opacity="0.9"/>
+      <rect x="80" y="60" width="740" height="400" rx="8" fill="none" stroke="#1a3a5c" stroke-width="2"/>
+      <line x1="450" y1="60" x2="450" y2="460" stroke="#00E5A0" stroke-width="2.5" opacity="0.6"/>
+      <line x1="450" y1="60" x2="450" y2="460" stroke="#00E5A0" stroke-width="14" opacity="0.04"/>
+      <line x1="80" y1="220" x2="450" y2="220" stroke="#1a4a6e" stroke-width="1.5"/>
+      <line x1="450" y1="220" x2="820" y2="220" stroke="#1a4a6e" stroke-width="1.5"/>
+      <line x1="80" y1="300" x2="450" y2="300" stroke="#1a4a6e" stroke-width="1.5"/>
+      <line x1="450" y1="300" x2="820" y2="300" stroke="#1a4a6e" stroke-width="1.5"/>
+      <line x1="265" y1="60" x2="265" y2="460" stroke="#1a4a6e" stroke-width="1.5"/>
+      <line x1="635" y1="60" x2="635" y2="460" stroke="#1a4a6e" stroke-width="1.5"/>
+      <ellipse cx="450" cy="260" rx="320" ry="210" fill="#00E5A0" opacity="0.022"/>
+      <circle cx="300" cy="180" r="13" fill="#00E5A0" opacity="0.6"/>
+      <ellipse cx="610" cy="330" rx="23" ry="31" fill="none" stroke="#00E5A0" stroke-width="2" opacity="0.45"/>
+      <line x1="610" y1="361" x2="610" y2="395" stroke="#00E5A0" stroke-width="3" opacity="0.45" stroke-linecap="round"/>
+      <circle cx="80" cy="60" r="4" fill="#00E5A0" opacity="0.5"/>
+      <circle cx="820" cy="60" r="4" fill="#00E5A0" opacity="0.5"/>
+      <circle cx="80" cy="460" r="4" fill="#00E5A0" opacity="0.5"/>
+      <circle cx="820" cy="460" r="4" fill="#00E5A0" opacity="0.5"/>
+    </svg>
+    <div class="hero-ov"></div>
+  </div>
+  <div class="hero-cnt">
+    <span class="hero-tag">Выборгское шоссе, д. 5 · Санкт-Петербург</span>
+    <h1 class="hero-h1">Падел-корты<br/><em>премиум класса</em></h1>
+    <p class="hero-p">Два профессиональных корта с качественным покрытием, современным освещением и всем необходимым для игры. Бронируйте время онлайн — быстро и без звонков.</p>
+    <div class="hero-acts">
+      <button class="btn btn-g" style="font-size:15px;padding:15px 30px" onclick="goTo('booking')">
+        <svg viewBox="0 0 20 20" fill="none"><rect x="3" y="5" width="14" height="13" rx="2" stroke="currentColor" stroke-width="1.8"/><line x1="7" y1="3" x2="7" y2="7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="13" y1="3" x2="13" y2="7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="3" y1="10" x2="17" y2="10" stroke="currentColor" stroke-width="1.5"/></svg>
+        Забронировать корт
+      </button>
+      <button class="btn btn-ghost" onclick="goTo('courts')">
+        <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M10 7v3l2 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        Смотреть корты
+      </button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="sn">2</span><span class="sl">корта</span></div>
+      <div class="sdiv"></div>
+      <div class="stat"><span class="sn">4</span><span class="sl">игрока макс.</span></div>
+      <div class="sdiv"></div>
+      <div class="stat"><span class="sn">7/7</span><span class="sl">дней в неделю</span></div>
+    </div>
+  </div>
+  <div class="scroll-arr" onclick="goTo('courts')">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12l7 7 7-7" stroke="#00E5A0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+</section>
+
+<!-- ===== COURTS ===== -->
+
+<section class="sec" id="courts">
+  <div class="container">
+    <div class="sec-hd">
+      <span class="sec-tag">Наши корты</span>
+      <h2 class="sec-title">Выберите корт</h2>
+      <p class="sec-desc">Оба корта оснащены качественным покрытием и профессиональным освещением</p>
+    </div>
+    <div class="courts-grid">
+
+```
+  <div class="cc" id="cc1" onclick="selectCourt(1)">
+    <div class="cc-img">
+      <svg class="cc-svg" viewBox="0 0 500 240" fill="none">
+        <rect width="500" height="240" fill="#0D1E35"/>
+        <rect x="30" y="20" width="440" height="200" rx="4" fill="#0A2040"/>
+        <rect x="30" y="20" width="440" height="200" rx="4" fill="none" stroke="#1a4a6e" stroke-width="1.5"/>
+        <line x1="250" y1="20" x2="250" y2="220" stroke="#00E5A0" stroke-width="2.5" opacity="0.8"/>
+        <line x1="250" y1="20" x2="250" y2="220" stroke="#00E5A0" stroke-width="12" opacity="0.05"/>
+        <line x1="30" y1="110" x2="250" y2="110" stroke="#1a4a6e" stroke-width="1"/>
+        <line x1="250" y1="110" x2="470" y2="110" stroke="#1a4a6e" stroke-width="1"/>
+        <line x1="140" y1="20" x2="140" y2="220" stroke="#1a4a6e" stroke-width="1"/>
+        <line x1="360" y1="20" x2="360" y2="220" stroke="#1a4a6e" stroke-width="1"/>
+        <ellipse cx="250" cy="120" rx="160" ry="90" fill="#00E5A0" opacity="0.022"/>
+        <circle cx="30" cy="20" r="3" fill="#00E5A0" opacity="0.6"/>
+        <circle cx="470" cy="20" r="3" fill="#00E5A0" opacity="0.6"/>
+        <circle cx="30" cy="220" r="3" fill="#00E5A0" opacity="0.6"/>
+        <circle cx="470" cy="220" r="3" fill="#00E5A0" opacity="0.6"/>
+        <text x="250" y="138" text-anchor="middle" fill="#00E5A0" font-size="60" font-weight="700" opacity="0.05" font-family="monospace">1</text>
+      </svg>
+      <div class="cbadge" id="badge1">Свободен</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-top">
+        <h3 class="cc-name">Корт 1</h3>
+        <div class="cc-status" id="st1"><span class="dot"></span> Свободен</div>
+      </div>
+      <p class="cc-txt">Просторный корт с улучшенным стеклянным ограждением и системой LED-подсветки</p>
+      <div class="cc-feats">
+        <span class="feat"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="6" r="3" stroke="#00E5A0" stroke-width="1.5"/><path d="M2 14c0-2.2 2.7-4 6-4s6 1.8 6 4" stroke="#00E5A0" stroke-width="1.5" stroke-linecap="round"/></svg>2–4 игрока</span>
+        <span class="feat"><svg viewBox="0 0 16 16" fill="none"><path d="M2 12V5l6-3 6 3v7" stroke="#00E5A0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="5" y="8" width="6" height="4" rx="1" stroke="#00E5A0" stroke-width="1.5"/></svg>Крытый</span>
+        <span class="feat"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5" stroke="#00E5A0" stroke-width="1.5"/><path d="M5.5 8l2 2 3-3" stroke="#00E5A0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>LED</span>
+      </div>
+      <div class="cc-ft">
+        <div class="cc-price"><span class="pamt">1 200 ₽</span><span class="pper">/ час</span></div>
+        <button class="btn btn-g btn-sm" onclick="event.stopPropagation();pickCourt(1)">Забронировать</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="cc cc2" id="cc2" onclick="selectCourt(2)">
+    <div class="cc-img">
+      <svg class="cc-svg" viewBox="0 0 500 240" fill="none">
+        <rect width="500" height="240" fill="#1A0D2E"/>
+        <rect x="30" y="20" width="440" height="200" rx="4" fill="#150B25"/>
+        <rect x="30" y="20" width="440" height="200" rx="4" fill="none" stroke="#3a1a6e" stroke-width="1.5"/>
+        <line x1="250" y1="20" x2="250" y2="220" stroke="#7B5CFF" stroke-width="2.5" opacity="0.8"/>
+        <line x1="250" y1="20" x2="250" y2="220" stroke="#7B5CFF" stroke-width="12" opacity="0.05"/>
+        <line x1="30" y1="110" x2="250" y2="110" stroke="#3a1a6e" stroke-width="1"/>
+        <line x1="250" y1="110" x2="470" y2="110" stroke="#3a1a6e" stroke-width="1"/>
+        <line x1="140" y1="20" x2="140" y2="220" stroke="#3a1a6e" stroke-width="1"/>
+        <line x1="360" y1="20" x2="360" y2="220" stroke="#3a1a6e" stroke-width="1"/>
+        <ellipse cx="250" cy="120" rx="160" ry="90" fill="#7B5CFF" opacity="0.022"/>
+        <circle cx="30" cy="20" r="3" fill="#7B5CFF" opacity="0.6"/>
+        <circle cx="470" cy="20" r="3" fill="#7B5CFF" opacity="0.6"/>
+        <circle cx="30" cy="220" r="3" fill="#7B5CFF" opacity="0.6"/>
+        <circle cx="470" cy="220" r="3" fill="#7B5CFF" opacity="0.6"/>
+        <text x="250" y="138" text-anchor="middle" fill="#7B5CFF" font-size="60" font-weight="700" opacity="0.05" font-family="monospace">2</text>
+      </svg>
+      <div class="cbadge cbadge2" id="badge2">Свободен</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-top">
+        <h3 class="cc-name">Корт 2</h3>
+        <div class="cc-status" id="st2"><span class="dot"></span> Свободен</div>
+      </div>
+      <p class="cc-txt">Компактный корт с панорамным стеклянным ограждением — идеален для интенсивных матчей</p>
+      <div class="cc-feats">
+        <span class="feat" style="border-color:rgba(123,92,255,.25)"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="6" r="3" stroke="#7B5CFF" stroke-width="1.5"/><path d="M2 14c0-2.2 2.7-4 6-4s6 1.8 6 4" stroke="#7B5CFF" stroke-width="1.5" stroke-linecap="round"/></svg>2–4 игрока</span>
+        <span class="feat" style="border-color:rgba(123,92,255,.25)"><svg viewBox="0 0 16 16" fill="none"><path d="M2 12V5l6-3 6 3v7" stroke="#7B5CFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="5" y="8" width="6" height="4" rx="1" stroke="#7B5CFF" stroke-width="1.5"/></svg>Крытый</span>
+        <span class="feat" style="border-color:rgba(123,92,255,.25)"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5" stroke="#7B5CFF" stroke-width="1.5"/><path d="M5.5 8l2 2 3-3" stroke="#7B5CFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Панорама</span>
+      </div>
+      <div class="cc-ft">
+        <div class="cc-price"><span class="pamt">1 000 ₽</span><span class="pper">/ час</span></div>
+        <button class="btn btn-v btn-sm" onclick="event.stopPropagation();pickCourt(2)">Забронировать</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ===== BOOKING ===== -->
+
+<section class="sec sec-dark" id="booking">
+  <div class="container">
+    <div class="sec-hd">
+      <span class="sec-tag">Онлайн-запись</span>
+      <h2 class="sec-title">Бронирование</h2>
+      <p class="sec-desc">Выберите корт, дату, время и количество игроков</p>
+    </div>
+    <div class="bk-layout">
+
+```
+  <div class="fc">
+    <!-- Court -->
+    <div class="fg">
+      <label class="flabel">Корт</label>
+      <div class="court-sel">
+        <button class="csbtn on1" id="csb1" onclick="selectCourtBtn(1)">
+          <span class="csnum a1" id="csn1">1</span>
+          <span class="csi"><span class="csn">Корт 1</span><span class="csp">1 200 ₽/ч</span></span>
+        </button>
+        <button class="csbtn" id="csb2" onclick="selectCourtBtn(2)">
+          <span class="csnum" id="csn2">2</span>
+          <span class="csi"><span class="csn">Корт 2</span><span class="csp">1 000 ₽/ч</span></span>
+        </button>
+      </div>
+    </div>
+    <!-- Date -->
+    <div class="fg">
+      <label class="flabel" for="bkDate">Дата</label>
+      <div class="iw">
+        <svg class="iico" viewBox="0 0 20 20" fill="none"><rect x="3" y="5" width="14" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/><line x1="7" y1="3" x2="7" y2="7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="13" y1="3" x2="13" y2="7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="3" y1="10" x2="17" y2="10" stroke="currentColor" stroke-width="1.2"/></svg>
+        <input type="date" id="bkDate" class="finp" onchange="onDateChange()"/>
+      </div>
+      <span class="ferr" id="e-date"></span>
+    </div>
+    <!-- Players -->
+    <div class="fg">
+      <label class="flabel">Количество игроков</label>
+      <div class="pl-sel">
+        <button class="pbtn" id="pb2" onclick="setPlayers(2)">2</button>
+        <button class="pbtn" id="pb3" onclick="setPlayers(3)">3</button>
+        <button class="pbtn" id="pb4" onclick="setPlayers(4)">4</button>
+      </div>
+      <span class="ferr" id="e-pl"></span>
+    </div>
+    <!-- Duration -->
+    <div class="fg">
+      <label class="flabel">Длительность</label>
+      <div class="dur-sel">
+        <button class="dbtn on" id="db1" onclick="setDur(1)">1 час</button>
+        <button class="dbtn" id="db15" onclick="setDur(1.5)">1.5 ч</button>
+        <button class="dbtn" id="db2" onclick="setDur(2)">2 часа</button>
+      </div>
+    </div>
+    <!-- Slots -->
+    <div class="fg">
+      <label class="flabel">Время</label>
+      <div class="slots-grid" id="slotsGrid">
+        <div class="slots-ph">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#4a5568" stroke-width="1.5"/><path d="M12 7v5l3 3" stroke="#4a5568" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Выберите дату для отображения слотов
+        </div>
+      </div>
+      <span class="ferr" id="e-time"></span>
+    </div>
+    <!-- Name / Phone -->
+    <div class="frow">
+      <div class="fg">
+        <label class="flabel" for="bkName">Имя</label>
+        <div class="iw">
+          <svg class="iico" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="3.5" stroke="currentColor" stroke-width="1.5"/><path d="M3 17c0-3.3 3.1-6 7-6s7 2.7 7 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <input type="text" id="bkName" class="finp" placeholder="Ваше имя"/>
+        </div>
+        <span class="ferr" id="e-name"></span>
+      </div>
+      <div class="fg">
+        <label class="flabel" for="bkPhone">Телефон</label>
+        <div class="iw">
+          <svg class="iico" viewBox="0 0 20 20" fill="none"><path d="M4 4a2 2 0 012-2h1.5a1 1 0 011 .8l.7 3.5a1 1 0 01-.5 1.1L7.5 8.2a11 11 0 004.3 4.3l.8-1.2a1 1 0 011.1-.5l3.5.7a1 1 0 01.8 1V14a2 2 0 01-2 2C7.16 16 4 12.84 4 9V4z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <input type="tel" id="bkPhone" class="finp" placeholder="+7 (___) ___-__-__" oninput="fmtPhone(this)"/>
+        </div>
+        <span class="ferr" id="e-phone"></span>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="sc">
+      <h3 class="stitle">Итог бронирования</h3>
+      <div class="slines">
+        <div class="sline"><span class="sk">Корт</span><span class="sv" id="s-court">—</span></div>
+        <div class="sline"><span class="sk">Дата</span><span class="sv" id="s-date">—</span></div>
+        <div class="sline"><span class="sk">Время</span><span class="sv" id="s-time">—</span></div>
+        <div class="sline"><span class="sk">Длительность</span><span class="sv" id="s-dur">—</span></div>
+        <div class="sline"><span class="sk">Игроки</span><span class="sv" id="s-pl">—</span></div>
+      </div>
+      <div class="inv-box">
+        <div class="inv-box-hd">
+          <span class="inv-box-t">Инвентарь</span>
+          <button class="inv-goto" onclick="goTo('inventory')">+ Добавить</button>
+        </div>
+        <div class="inv-rows" id="invSumRows"><span class="inv-empty">Не выбран</span></div>
+      </div>
+      <div class="sdiv2"></div>
+      <div class="stline"><span class="sk">Аренда корта</span><span class="sv" id="s-cp">—</span></div>
+      <div class="stline"><span class="sk">Инвентарь</span><span class="sv" id="s-ip">0 ₽</span></div>
+      <div class="stotal"><span>Итого</span><span class="tamt" id="s-tot">0 ₽</span></div>
+      <button class="btn btn-g btn-full" onclick="submitBooking()">
+        <svg viewBox="0 0 20 20" fill="none"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/></svg>
+        Подтвердить бронь
+      </button>
+      <p class="snote">Бронирование без предоплаты. Оплата на месте.</p>
+    </div>
+
+    <div class="mbc">
+      <div class="mbc-hd">
+        <span class="mbc-t">Мои брони</span>
+        <button class="btn-danger" onclick="clearAll()">Очистить всё</button>
+      </div>
+      <div class="mb-list" id="mbList"><span class="mb-empty">Нет активных броней</span></div>
+    </div>
+  </div>
+
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ===== INVENTORY ===== -->
+
+<section class="sec" id="inventory">
+  <div class="container">
+    <div class="sec-hd">
+      <span class="sec-tag">Аренда</span>
+      <h2 class="sec-title">Инвентарь</h2>
+      <p class="sec-desc">Добавьте снаряжение к бронированию — доставим прямо к корту</p>
+    </div>
+    <div class="inv-grid">
+
+```
+  <div class="icard" id="ic-racket">
+    <svg class="isvg" viewBox="0 0 80 80" fill="none">
+      <ellipse cx="40" cy="30" rx="22" ry="26" fill="#00E5A0" opacity="0.08" stroke="#00E5A0" stroke-width="2"/>
+      <line x1="22" y1="20" x2="58" y2="20" stroke="#00E5A0" stroke-width="1" opacity="0.5"/>
+      <line x1="20" y1="28" x2="60" y2="28" stroke="#00E5A0" stroke-width="1" opacity="0.5"/>
+      <line x1="20" y1="36" x2="60" y2="36" stroke="#00E5A0" stroke-width="1" opacity="0.5"/>
+      <line x1="32" y1="6" x2="32" y2="54" stroke="#00E5A0" stroke-width="1" opacity="0.5"/>
+      <line x1="40" y1="4" x2="40" y2="56" stroke="#00E5A0" stroke-width="1" opacity="0.5"/>
+      <line x1="48" y1="6" x2="48" y2="54" stroke="#00E5A0" stroke-width="1" opacity="0.5"/>
+      <rect x="36" y="55" width="8" height="18" rx="3" fill="#00E5A0" opacity="0.25" stroke="#00E5A0" stroke-width="2"/>
+      <line x1="34" y1="62" x2="46" y2="62" stroke="#00E5A0" stroke-width="1.5" opacity="0.6"/>
+    </svg>
+    <div class="iinfo">
+      <div class="inm">Ракетка</div>
+      <div class="idesc">Профессиональная падел-ракетка</div>
+      <div class="ift">
+        <span class="ipr">200 ₽ / шт</span>
+        <div class="icnt">
+          <button class="cbtn" onclick="changeInv('racket',-1)">−</button>
+          <span class="cval" id="cnt-racket">0</span>
+          <button class="cbtn" onclick="changeInv('racket',1)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="icard" id="ic-balls">
+    <svg class="isvg" viewBox="0 0 80 80" fill="none">
+      <circle cx="40" cy="40" r="22" fill="#00E5A0" opacity="0.08" stroke="#00E5A0" stroke-width="2"/>
+      <path d="M20 33Q40 18 60 33" stroke="#00E5A0" stroke-width="1.5" fill="none" opacity="0.6"/>
+      <path d="M20 47Q40 62 60 47" stroke="#00E5A0" stroke-width="1.5" fill="none" opacity="0.6"/>
+      <circle cx="40" cy="40" r="6" fill="#00E5A0" opacity="0.2"/>
+    </svg>
+    <div class="iinfo">
+      <div class="inm">Мячи</div>
+      <div class="idesc">Набор из 3 мячей для падела</div>
+      <div class="ift">
+        <span class="ipr">150 ₽ / набор</span>
+        <div class="icnt">
+          <button class="cbtn" onclick="changeInv('balls',-1)">−</button>
+          <span class="cval" id="cnt-balls">0</span>
+          <button class="cbtn" onclick="changeInv('balls',1)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="icard" id="ic-grip">
+    <svg class="isvg" viewBox="0 0 80 80" fill="none">
+      <rect x="28" y="15" width="24" height="48" rx="8" fill="#00E5A0" opacity="0.08" stroke="#00E5A0" stroke-width="2"/>
+      <line x1="28" y1="28" x2="52" y2="28" stroke="#00E5A0" stroke-width="1.5" opacity="0.5"/>
+      <line x1="28" y1="38" x2="52" y2="38" stroke="#00E5A0" stroke-width="1.5" opacity="0.5"/>
+      <line x1="28" y1="48" x2="52" y2="48" stroke="#00E5A0" stroke-width="1.5" opacity="0.5"/>
+      <circle cx="40" cy="20" r="3" fill="#00E5A0" opacity="0.5"/>
+    </svg>
+    <div class="iinfo">
+      <div class="inm">Намотка</div>
+      <div class="idesc">Сменная намотка на ручку</div>
+      <div class="ift">
+        <span class="ipr">80 ₽ / шт</span>
+        <div class="icnt">
+          <button class="cbtn" onclick="changeInv('grip',-1)">−</button>
+          <span class="cval" id="cnt-grip">0</span>
+          <button class="cbtn" onclick="changeInv('grip',1)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="icard" id="ic-wrist">
+    <svg class="isvg" viewBox="0 0 80 80" fill="none">
+      <ellipse cx="40" cy="40" rx="20" ry="14" fill="#00E5A0" opacity="0.08" stroke="#00E5A0" stroke-width="2"/>
+      <ellipse cx="40" cy="40" rx="20" ry="14" fill="none" stroke="#00E5A0" stroke-width="8" opacity="0.09"/>
+      <line x1="28" y1="37" x2="52" y2="37" stroke="#00E5A0" stroke-width="1.5" opacity="0.5"/>
+      <line x1="28" y1="43" x2="52" y2="43" stroke="#00E5A0" stroke-width="1.5" opacity="0.5"/>
+    </svg>
+    <div class="iinfo">
+      <div class="inm">Напульсник</div>
+      <div class="idesc">Спортивный напульсник (пара)</div>
+      <div class="ift">
+        <span class="ipr">60 ₽ / пара</span>
+        <div class="icnt">
+          <button class="cbtn" onclick="changeInv('wrist',-1)">−</button>
+          <span class="cval" id="cnt-wrist">0</span>
+          <button class="cbtn" onclick="changeInv('wrist',1)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div class="itotal-bar h" id="itBar">
+  <span class="itl">Стоимость инвентаря:</span>
+  <span class="ita" id="itAmt">0 ₽</span>
+  <button class="btn btn-g btn-sm" onclick="goTo('booking')">Добавить к брони →</button>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ===== ADDRESS ===== -->
+
+<div class="astrip">
+  <div class="container">
+    <div class="acont">
+      <div class="aitem">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" stroke="#00E5A0" stroke-width="1.8"/><circle cx="12" cy="9" r="2.5" stroke="#00E5A0" stroke-width="1.8"/></svg>
+        Выборгское шоссе, д. 5, Санкт-Петербург
+      </div>
+      <div class="aitem">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#00E5A0" stroke-width="1.8"/><path d="M12 7v5l3 3" stroke="#00E5A0" stroke-width="1.8" stroke-linecap="round"/></svg>
+        Пн–Вс: 7:00 — 23:00
+      </div>
+      <div class="aitem">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M5 4a2 2 0 012-2h2l1.5 4.5-1.5 1A11 11 0 0014.5 13l1-1.5L20 13v2a2 2 0 01-2 2C9.16 17 5 12.84 5 7V4z" stroke="#00E5A0" stroke-width="1.8" stroke-linecap="round"/></svg>
+        +7 (812) 000-00-00
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-in">
+      <div class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        <svg class="logo-icon" viewBox="0 0 36 36" fill="none">
+          <rect x="2" y="2" width="32" height="32" rx="8" fill="#00E5A0" opacity="0.15"/>
+          <path d="M10 26L18 10L26 26" stroke="#00E5A0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="18" cy="20" r="3.5" fill="#00E5A0"/>
+        </svg>
+        <span class="logo-text">PADEL<strong>DISTRICT</strong></span>
+      </div>
+      <p class="footer-txt">© 2025 PadelDistrict · Выборгское шоссе, д. 5, СПб</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== MODAL ===== -->
+
+<div class="ov" id="ov" onclick="closeModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="m-ico">
+      <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="22" stroke="#00E5A0" stroke-width="2.5"/><path d="M14 24l7 7 13-13" stroke="#00E5A0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <h3 class="m-title" id="mTitle">Бронь подтверждена!</h3>
+    <p class="m-txt" id="mTxt">Ваш корт забронирован. Ждём вас!</p>
+    <div class="m-det" id="mDet"></div>
+    <button class="btn btn-g btn-full" onclick="closeModal()">
+      <svg viewBox="0 0 20 20" fill="none"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Отлично, понятно!
+    </button>
+  </div>
+</div>
+
+<!-- ===== TOAST ===== -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================
+   PADEL DISTRICT — JavaScript (встроенный, полностью офлайн)
+   ===================================================== */
+
+// ---- СОСТОЯНИЕ ----
+var S = {
+  court: 1, date: null, time: null, players: null, duration: 1,
+  inv: {
+    racket:{ name:'Ракетка',    price:200, qty:0 },
+    balls: { name:'Мячи',       price:150, qty:0 },
+    grip:  { name:'Намотка',    price:80,  qty:0 },
+    wrist: { name:'Напульсник', price:60,  qty:0 }
+  },
+  prices: {1:1200, 2:1000},
+  occ: {}   // 'court-date' -> ['HH:MM',...]
+};
+
+// ---- ИНИЦИАЛИЗАЦИЯ ----
+window.addEventListener('DOMContentLoaded', function(){
+  var inp = document.getElementById('bkDate');
+  var t = todayStr();
+  inp.min = t; inp.value = t;
+  S.date = t;
+  loadStorage();
+  renderSlots();
+  updateSummary();
+  renderMB();
+  updateBadges();
+  window.addEventListener('scroll', function(){
+    document.getElementById('nav').classList.toggle('sc', window.scrollY > 20);
+  });
+  setInterval(function(){ renderSlots(); updateBadges(); }, 30000);
+});
+
+// ---- HELPERS ----
+function todayStr(){
+  return new Date().toISOString().split('T')[0];
+}
+function fmtDate(s){
+  if(!s) return '—';
+  var p=s.split('-'), m=['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+  return p[2]+' '+m[+p[1]-1]+' '+p[0];
+}
+function pad(n){ return String(n).padStart(2,'0'); }
+function addMin(hhmm, m){
+  var p=hhmm.split(':').map(Number), t=p[0]*60+p[1]+m;
+  return pad(Math.floor(t/60))+':'+pad(t%60);
+}
+function goTo(id){ var e=document.getElementById(id); if(e) e.scrollIntoView({behavior:'smooth'}); }
+function toggleMenu(){ document.getElementById('mmenu').classList.toggle('open'); }
+function closeMobile(){ document.getElementById('mmenu').classList.remove('open'); }
+
+// ---- СЛОТЫ ----
+function affected(start, dur){
+  var r=[], steps=dur===1?2:dur===1.5?3:4;
+  for(var i=0;i<steps;i++){
+    var p=start.split(':').map(Number), t=p[0]*60+p[1]+i*30;
+    r.push(pad(Math.floor(t/60))+':'+pad(t%60));
+  }
+  return r;
+}
+function markOcc(court,date,time,dur){
+  var k=court+'-'+date;
+  if(!S.occ[k]) S.occ[k]=[];
+  affected(time,dur).forEach(function(s){ if(S.occ[k].indexOf(s)===-1) S.occ[k].push(s); });
+}
+function renderSlots(){
+  var g=document.getElementById('slotsGrid');
+  if(!S.date){
+    g.innerHTML='<div class="slots-ph"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#4a5568" stroke-width="1.5"/><path d="M12 7v5l3 3" stroke="#4a5568" stroke-width="1.5" stroke-linecap="round"/></svg>Выберите дату</div>';
+    return;
+  }
+  var slots=[], h;
+  for(h=7;h<=22;h++){ slots.push(pad(h)+':00'); if(h<22) slots.push(pad(h)+':30'); }
+  var k=S.court+'-'+S.date, occ=S.occ[k]||[];
+  var isToday=S.date===todayStr(), now=new Date();
+  var nowMin=isToday?now.getHours()*60+now.getMinutes():0;
+  g.innerHTML='';
+  slots.forEach(function(sl){
+    var p=sl.split(':').map(Number), slMin=p[0]*60+p[1];
+    var past=isToday&&slMin<=nowMin, busy=occ.indexOf(sl)!==-1||past;
+    var d=document.createElement('div');
+    d.className='slot'+(busy?' occ':'')+(S.time===sl&&!busy?' on':'');
+    d.textContent=sl;
+    d.title=past?'Время прошло':busy?'Занято':'Свободно';
+    if(!busy) d.onclick=function(){ pickSlot(sl); };
+    g.appendChild(d);
+  });
+}
+function pickSlot(t){
+  S.time=t;
+  document.querySelectorAll('.slot').forEach(function(e){
+    e.classList.toggle('on', e.textContent===t && !e.classList.contains('occ'));
+  });
+  document.getElementById('e-time').textContent='';
+  updateSummary();
+}
+function onDateChange(){
+  S.date=document.getElementById('bkDate').value||null;
+  S.time=null;
+  renderSlots(); updateSummary();
+}
+
+// ---- КОРТ ----
+function selectCourt(n){
+  S.court=n;
+  document.querySelectorAll('.cc').forEach(function(c){ c.classList.remove('sel'); });
+  document.getElementById('cc'+n).classList.add('sel');
+  selectCourtBtn(n);
+}
+function selectCourtBtn(n){
+  S.court=n; S.time=null;
+  var b1=document.getElementById('csb1'), b2=document.getElementById('csb2');
+  var n1=document.getElementById('csn1'), n2=document.getElementById('csn2');
+  b1.className='csbtn'+(n===1?' on1':''); b2.className='csbtn'+(n===2?' on2':'');
+  n1.className='csnum'+(n===1?' a1':''); n2.className='csnum'+(n===2?' a2':'');
+  renderSlots(); updateSummary();
+  showToast('Корт '+n+' выбран');
+}
+function pickCourt(n){ selectCourt(n); goTo('booking'); }
+
+// ---- ИГРОКИ / ДЛИТЕЛЬНОСТЬ ----
+function setPlayers(n){
+  S.players=n;
+  [2,3,4].forEach(function(v){ document.getElementById('pb'+v).classList.toggle('on',v===n); });
+  document.getElementById('e-pl').textContent='';
+  updateSummary();
+}
+function setDur(h){
+  S.duration=h; S.time=null;
+  [{id:'db1',v:1},{id:'db15',v:1.5},{id:'db2',v:2}].forEach(function(o){
+    document.getElementById(o.id).classList.toggle('on',o.v===h);
+  });
+  renderSlots(); updateSummary();
+}
+
+// ---- ИНВЕНТАРЬ ----
+function changeInv(t,d){
+  var it=S.inv[t]; it.qty=Math.max(0,it.qty+d);
+  document.getElementById('cnt-'+t).textContent=it.qty;
+  document.getElementById('ic-'+t).classList.toggle('active',it.qty>0);
+  var tot=invTot();
+  var bar=document.getElementById('itBar');
+  bar.classList.toggle('h',tot===0);
+  document.getElementById('itAmt').textContent=tot+' ₽';
+  updateSummary();
+}
+function invTot(){ return Object.values(S.inv).reduce(function(s,i){return s+i.price*i.qty;},0); }
+
+// ---- СУММАРИ ----
+function updateSummary(){
+  var cp=S.prices[S.court]*S.duration, ip=invTot();
+  document.getElementById('s-court').textContent='Корт '+S.court;
+  document.getElementById('s-date').textContent=fmtDate(S.date);
+  document.getElementById('s-time').textContent=S.time?S.time+' – '+addMin(S.time,S.duration*60):'—';
+  document.getElementById('s-dur').textContent={1:'1 час',1.5:'1.5 часа',2:'2 часа'}[S.duration]||'—';
+  document.getElementById('s-pl').textContent=S.players?S.players+' чел.':'—';
+  document.getElementById('s-cp').textContent=S.time?cp+' ₽':'—';
+  document.getElementById('s-ip').textContent=ip+' ₽';
+  document.getElementById('s-tot').textContent=(S.time?cp+ip:ip)+' ₽';
+  renderInvSum();
+}
+function renderInvSum(){
+  var items=Object.entries(S.inv).filter(function(e){return e[1].qty>0;});
+  var c=document.getElementById('invSumRows');
+  if(!items.length){c.innerHTML='<span class="inv-empty">Не выбран</span>';return;}
+  c.innerHTML=items.map(function(e){
+    var v=e[1];
+    return '<div class="inv-row"><span>'+v.name+' × '+v.qty+'</span><span>'+v.price*v.qty+' ₽</span></div>';
+  }).join('');
+}
+
+// ---- СТАТУС КОРТОВ ----
+function updateBadges(){
+  var today=todayStr(), now=new Date();
+  var sl=pad(now.getHours())+':'+(now.getMinutes()<30?'00':'30');
+  [1,2].forEach(function(c){
+    var occ=S.occ[c+'-'+today]||[];
+    var busy=occ.indexOf(sl)!==-1;
+    var b=document.getElementById('badge'+c), s=document.getElementById('st'+c);
+    b.textContent=busy?'Занят':'Свободен';
+    b.classList.toggle('busy',busy);
+    s.className='cc-status'+(busy?' busy':'');
+    s.innerHTML='<span class="dot"></span> '+(busy?'Занят':'Свободен');
+  });
+}
+
+// ---- ТЕЛЕФОН ----
+function fmtPhone(inp){
+  var v=inp.value.replace(/\D/g,'');
+  if(v.startsWith('8')) v='7'+v.slice(1);
+  if(v.startsWith('7')){
+    var d=v.slice(1), r='+7';
+    if(d.length>0) r+=' ('+d.slice(0,3);
+    if(d.length>3) r+=') '+d.slice(3,6);
+    if(d.length>6) r+='-'+d.slice(6,8);
+    if(d.length>8) r+='-'+d.slice(8,10);
+    inp.value=r;
+  } else if(v.length>0){ inp.value='+'+v.slice(0,11); }
+}
+
+// ---- ВАЛИДАЦИЯ ----
+function validate(){
+  var ok=true;
+  function clr(id){var e=document.getElementById(id);if(e)e.textContent='';}
+  function err(id,m){var e=document.getElementById(id);if(e)e.textContent=m;ok=false;}
+  ['e-date','e-time','e-pl','e-name','e-phone'].forEach(clr);
+  if(!S.date) err('e-date','Выберите дату');
+  if(!S.time) err('e-time','Выберите время');
+  if(!S.players) err('e-pl','Выберите количество игроков');
+  if(document.getElementById('bkName').value.trim().length<2) err('e-name','Введите ваше имя');
+  if(document.getElementById('bkPhone').value.replace(/\D/g,'').length<10) err('e-phone','Введите корректный номер');
+  if(S.time&&S.date){
+    var aff=affected(S.time,S.duration), occ=S.occ[S.court+'-'+S.date]||[];
+    if(aff.some(function(s){return occ.indexOf(s)!==-1;})) err('e-time','Это время уже занято — выберите другое');
+  }
+  return ok;
+}
+
+// ---- ХРАНИЛИЩЕ ----
+function loadData(){ try{return JSON.parse(localStorage.getItem('pdBk'))||[];}catch(e){return[];} }
+function saveData(arr){ localStorage.setItem('pdBk',JSON.stringify(arr)); }
+function loadStorage(){ loadData().forEach(function(b){ markOcc(b.court,b.date,b.time,b.duration); }); }
+
+// ---- БРОНИРОВАНИЕ ----
+function submitBooking(){
+  if(!validate()){
+    showToast('Заполните все обязательные поля');
+    var fe=document.querySelector('.ferr:not(:empty)');
+    if(fe) fe.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  var name=document.getElementById('bkName').value.trim();
+  var phone=document.getElementById('bkPhone').value.trim();
+  var cp=S.prices[S.court]*S.duration, ip=invTot(), total=cp+ip;
+  var te=addMin(S.time,S.duration*60), tr=S.time+' – '+te;
+  var invStr=Object.entries(S.inv).filter(function(e){return e[1].qty>0;})
+    .map(function(e){return e[1].name+' ×'+e[1].qty;}).join(', ')||'Не выбран';
+  var b={id:Date.now(),court:S.court,date:S.date,time:S.time,duration:S.duration,
+    players:S.players,name:name,phone:phone,total:total,tr:tr,inv:invStr};
+  markOcc(b.court,b.date,b.time,b.duration);
+  var all=loadData(); all.push(b); saveData(all);
+  renderSlots(); updateBadges(); renderMB();
+  showModal(b);
+  resetForm();
+}
+function resetForm(){
+  S.time=null; S.players=null; S.duration=1;
+  Object.values(S.inv).forEach(function(v){v.qty=0;});
+  document.getElementById('bkName').value='';
+  document.getElementById('bkPhone').value='';
+  [2,3,4].forEach(function(v){document.getElementById('pb'+v).classList.remove('on');});
+  [{id:'db1',v:1},{id:'db15',v:1.5},{id:'db2',v:2}].forEach(function(o){
+    document.getElementById(o.id).classList.toggle('on',o.v===1);
+  });
+  ['racket','balls','grip','wrist'].forEach(function(t){
+    document.getElementById('cnt-'+t).textContent='0';
+    document.getElementById('ic-'+t).classList.remove('active');
+  });
+  document.getElementById('itBar').classList.add('h');
+  renderSlots(); updateSummary();
+}
+
+// ---- МОИ БРОНИ ----
+function renderMB(){
+  var list=document.getElementById('mbList');
+  var all=loadData().reverse().slice(0,6);
+  if(!all.length){list.innerHTML='<span class="mb-empty">Нет активных броней</span>';return;}
+  list.innerHTML=all.map(function(b){
+    return '<div class="bi" id="bi'+b.id+'">'
+      +'<div class="bi-top"><span class="bi-nm">Корт '+b.court+' · '+b.name+'</span>'
+      +'<button class="bi-rm" onclick="removeBk('+b.id+')" title="Отменить">×</button></div>'
+      +'<div class="bi-d">'+fmtDate(b.date)+', '+b.tr+'<br/>'+b.players+' игр. · '+b.duration+' ч.'
+      +(b.inv!=='Не выбран'?'<br/>🎾 '+b.inv:'')+'</div>'
+      +'<div class="bi-p">'+b.total+' ₽</div>'
+      +'</div>';
+  }).join('');
+}
+function removeBk(id){
+  var all=loadData(), b=all.find(function(x){return x.id===id;});
+  if(!b) return;
+  var k=b.court+'-'+b.date, aff=affected(b.time,b.duration);
+  if(S.occ[k]) S.occ[k]=S.occ[k].filter(function(s){return aff.indexOf(s)===-1;});
+  saveData(all.filter(function(x){return x.id!==id;}));
+  var el=document.getElementById('bi'+id);
+  if(el){el.style.cssText='opacity:0;transform:translateX(-20px);transition:.3s';}
+  setTimeout(function(){renderMB();renderSlots();updateBadges();},300);
+  showToast('Бронь отменена');
+}
+function clearAll(){
+  if(!confirm('Удалить все брони?')) return;
+  Object.keys(S.occ).forEach(function(k){delete S.occ[k];});
+  saveData([]); renderMB(); renderSlots(); updateBadges();
+  showToast('Все брони удалены');
+}
+
+// ---- МОДАЛ ----
+function showModal(b){
+  document.getElementById('mTitle').textContent='Бронь подтверждена!';
+  document.getElementById('mTxt').textContent='Отличный выбор, '+b.name+'! Ждём вас.';
+  document.getElementById('mDet').innerHTML=
+    '<strong style="color:#00E5A0">Корт '+b.court+'</strong><br/>'
+    +'📅 '+fmtDate(b.date)+'<br/>⏰ '+b.tr+'<br/>👥 '+b.players+' игрок(а) · '+b.duration+' ч.<br/>'
+    +(b.inv!=='Не выбран'?'🎾 '+b.inv+'<br/>':'')
+    +'<br/><strong>Итого: '+b.total+' ₽</strong><br/>'
+    +'<span style="font-size:11px;color:#4E6080">Оплата на месте · Выборгское шоссе, д. 5</span>';
+  document.getElementById('ov').classList.add('open');
+}
+function closeModal(){ document.getElementById('ov').classList.remove('open'); }
+
+// ---- TOAST ----
+var _tt=null;
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(_tt); _tt=setTimeout(function(){t.classList.remove('show');},2500);
+}
+</script>
+
+</body>
+</html>
